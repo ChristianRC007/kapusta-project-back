@@ -1,39 +1,22 @@
 const app = require('../app');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+const { DB_HOST, PORT = 3000 } = process.env;
 
-// const db = mongoose.connect(dbURI, {
-//   useNewUrlParser: true,
-//   useCreateIndex: true,
-//   useUnifiedTopology: true,
-//   useFindAndModify: false,
-// });
-
-// mongoose.connection.on('connected', () => {
-//   console.log('Database connection successful');
-// });
-
-// mongoose.connection.on('error', error => {
-//   console.log(`Mongoose contction error: ${error.message}`);
-// });
-
-// mongoose.connection.on('disconnected', () => {
-//   console.log('Database disconnected');
-// });
-
-// db.then(() => {
-//   app.listen(PORT, async function () {
-//     console.log(`Server running. Use our API on port: ${PORT}`);
-//   });
-// }).catch(err => {
-//   console.log(`Server not running. Error message: ${err.message}`);
-//   process.exit(1);
-// });
-
-app.listen(PORT, async function () {
-  console.log(`Server running. Use our API on port: ${PORT}`);
-});
-
-// module.exports = db;
+mongoose
+  .connect(DB_HOST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    // These parameters are no longer supported from version Mongoose 6.x
+    // useFindAndModify: false,
+    // useCreateIndex: true,
+  })
+  .then(() => {
+    app.listen(PORT);
+    console.log(`Server running. Use our API on port: ${PORT}`);
+  })
+  .catch(error => {
+    console.log(error);
+    process.exit(1);
+  });
