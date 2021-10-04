@@ -24,21 +24,12 @@ app.use((req, res) => {
   });
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _, res, __) => {
   const { status = 500, message = 'Internal server error' } = err;
   res.status(status).json({
+    code: status,
     message,
   });
 });
-
-// app.use((err, req, res) => {
-//   err.status = err.status ? err.status : httpCodes.INTERNAL_SERVER_ERROR;
-//   res.status(err.status).json({
-//     status: err.status === 500 ? 'failed' : 'error',
-//     code: err.status,
-//     message: err.message,
-//     data: err.status === 500 ? 'Internal server error' : err.data,
-//   });
-// });
 
 module.exports = app;
