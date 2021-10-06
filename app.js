@@ -3,7 +3,7 @@ const cors = require('cors');
 const { httpCodes } = require('./helpers/httpCodes');
 
 const usersRouter = require('./routes/api/users');
-// const transactionsRouter = require('./routes/api/transactions')
+const transactionsRouter = require('./routes/api/transactions');
 
 require('dotenv').config();
 
@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/v1/users', usersRouter);
-// app.use('/api/v1/transactions', transactionsRouter);
+app.use('/api/v1/transactions', transactionsRouter);
 
 app.use((req, res) => {
   res.status(httpCodes.NOT_FOUND).json({
