@@ -9,7 +9,6 @@ const removeById = async (req, res, next) => {
       message: 'Not found',
     });
   }
-  console.log('remove');
   res.json({
     status: 'success',
     code: 200,
