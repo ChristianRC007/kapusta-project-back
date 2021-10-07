@@ -28,8 +28,8 @@ router.post(
 
 router.delete(
   '/:transactionId',
-  authentication,
-  controllerWrapper(transactions.remove),
+  // authentication,
+  controllerWrapper(transactions.removeById),
 );
 
 //TODO: 11. Реализовать энд-поинт получения сводки о месяцах текущего года по расходам

@@ -1,13 +1,13 @@
 const addIncome = require('./addIncome');
 const addExpense = require('./addExpense');
-const remove = require('./remove');
+const removeById = require('./removeById');
 const getIncomeDetail = require('./getIncomeDetail');
 const getExpenseDetail = require('./getExpenseDetail');
 
 module.exports = {
   addIncome,
   addExpense,
-  remove,
+  removeById,
   getIncomeDetail,
   getExpenseDetail,
 };
