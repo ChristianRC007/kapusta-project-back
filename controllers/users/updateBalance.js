@@ -14,8 +14,6 @@ const updateBalance = async (req, res, next) => {
       throw new NotFound();
     }
     res.json({
-      status: 'success',
-      code: 200,
       user: {
         email: updateUser.email,
         balance: updateUser.balance,
@@ -24,7 +22,6 @@ const updateBalance = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  console.log('updateBalance');
 };
 
 module.exports = updateBalance;

@@ -21,14 +21,14 @@ router.post(
 
 router.post(
   '/addExpense',
-  // authentication,
+  authentication,
   transactionValidationMiddleware,
   controllerWrapper(transactions.addExpense),
 );
 
 router.delete(
   '/:transactionId',
-  // authentication,
+  authentication,
   controllerWrapper(transactions.removeById),
 );
 
