@@ -25,7 +25,7 @@ const login = async (req, res) => {
       name,
       googleId,
       // accessToken,
-      balance: balance,
+      balance: 0,
     });
   }
 
