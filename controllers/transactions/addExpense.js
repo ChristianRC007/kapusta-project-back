@@ -5,7 +5,7 @@ const addExpense = async (req, res, next) => {
     const transactionData = await Transaction.create({
       ...req.body,
       isIncome: false,
-      // owner: req.user._id,
+      owner: req.user._id,
     });
 
     res.status(201).json({

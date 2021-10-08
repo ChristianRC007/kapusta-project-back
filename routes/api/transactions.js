@@ -21,28 +21,38 @@ router.post(
 
 router.post(
   '/addExpense',
-  // authentication,
+  authentication,
   transactionValidationMiddleware,
   controllerWrapper(transactions.addExpense),
 );
 
 router.delete(
   '/:transactionId',
-  // authentication,
+  authentication,
   controllerWrapper(transactions.removeById),
 );
 
-//TODO: 11. Реализовать энд-поинт получения сводки о месяцах текущего года по расходам
+router.get(
+  '/getExpenseByDate/:date',
+  authentication,
+  controllerWrapper(transactions.getExpenseByDate),
+);
+
+router.get(
+  '/getIncomeByDate/:date',
+  authentication,
+  controllerWrapper(transactions.getIncomeByDate),
+);
+
 router.get(
   '/getExpenseDetail',
-  // authentication,
+  authentication,
   controllerWrapper(transactions.getExpenseDetail),
 );
 
-//TODO: 12. Реализовать энд-поинт получения сводки о месяцах текущего года по доходам
 router.get(
-  '/getIncomeDetail',
-  // authentication,
+  '/getIncomeDetail/:date',
+  authentication,
   controllerWrapper(transactions.getIncomeDetail),
 );
 
