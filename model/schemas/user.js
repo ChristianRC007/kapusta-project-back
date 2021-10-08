@@ -15,11 +15,11 @@ const userSchema = Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      // required: [true, 'Password is required'],
     },
     name: {
       type: String,
-      required: [true, 'Name is required'],
+      // required: [true, 'Name is required'],
     },
     token: {
       type: String,
@@ -46,22 +46,18 @@ userSchema.methods.setPassword = function (password) {
 };
 
 userSchema.methods.comparePassword = function (password) {
+  if (!password || !this.password) return false;
   return bcrypt.compareSync(password, this.password);
 };
 
-// userSchema.methods.setVerifyToken = function () {
-//   this.verificationToken = nanoid();
-//   this.verify = false;
-// };
-
 const joiUserSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
-  name: Joi.string().required(),
+  password: Joi.string().min(6),
+  name: Joi.string(),
   googleId: Joi.string(),
   accessToken: Joi.string(),
   balance: Joi.number(),
-});
+}).or('password', 'googleId');
 
 const User = model('user', userSchema);
 

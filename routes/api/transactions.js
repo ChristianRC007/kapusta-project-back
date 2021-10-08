@@ -14,7 +14,7 @@ const transactionValidationMiddleware = validation(joiTransactionSchema);
 
 router.post(
   '/addIncome',
-  // authentication,
+  authentication,
   transactionValidationMiddleware,
   controllerWrapper(transactions.addIncome),
 );
