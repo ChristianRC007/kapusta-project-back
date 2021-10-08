@@ -7,5 +7,6 @@ const logout = async (req, res) => {
     code: 204,
     message: 'No Content',
   });
+  console.log('logout');
 };
 module.exports = logout;
