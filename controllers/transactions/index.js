@@ -5,6 +5,8 @@ const getIncomeDetail = require('./getIncomeDetail');
 const getExpenseDetail = require('./getExpenseDetail');
 const getExpenseByDate = require('./getExpenseByDate');
 const getIncomeByDate = require('./getIncomeByDate');
+const getExpenseByMonth = require('./getExpenseByMonth');
+const getIncomeByMonth = require('./getIncomeByMonth');
 
 module.exports = {
   addIncome,
@@ -14,4 +16,6 @@ module.exports = {
   getExpenseDetail,
   getExpenseByDate,
   getIncomeByDate,
+  getExpenseByMonth,
+  getIncomeByMonth,
 };

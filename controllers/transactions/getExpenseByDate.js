@@ -19,5 +19,3 @@ const getExpenseByDate = async (req, res, next) => {
 };
 
 module.exports = getExpenseByDate;
-
-// date: { $gte: '1987-10-19', $lte: '1987-10-26' },
