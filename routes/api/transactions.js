@@ -45,7 +45,19 @@ router.get(
 );
 
 router.get(
-  '/getExpenseDetail',
+  '/getExpenseByMonth',
+  authentication,
+  controllerWrapper(transactions.getExpenseByMonth),
+);
+
+router.get(
+  '/getIncomeByMonth',
+  authentication,
+  controllerWrapper(transactions.getIncomeByMonth),
+);
+
+router.get(
+  '/getExpenseDetail/:date',
   authentication,
   controllerWrapper(transactions.getExpenseDetail),
 );
