@@ -8,10 +8,10 @@ const current = async (req, res, next) => {
     throw new Unauthorized('Not authorized');
   }
   res.status(200).json({
-    status: 'success',
-    code: 200,
     user: {
       email: user.email,
+      balance: user.balance,
+      name: user.name,
     },
   });
 };

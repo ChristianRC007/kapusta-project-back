@@ -25,7 +25,7 @@ router.get('/current', authentication, controllerWrapper(users.current));
 
 router.get('/logout', authentication, controllerWrapper(users.logout));
 
-router.get('/balance', authentication, controllerWrapper(users.getBalance));
+// router.get('/balance', authentication, controllerWrapper(users.getBalance));
 
 router.patch(
   '/balance',
