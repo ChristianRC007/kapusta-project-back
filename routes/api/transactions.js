@@ -68,4 +68,6 @@ router.get(
   controllerWrapper(transactions.getIncomeDetail),
 );
 
+router.get('/getLast', authentication, controllerWrapper(transactions.getLast));
+
 module.exports = router;
