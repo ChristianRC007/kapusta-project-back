@@ -1,14 +1,15 @@
 const { Transaction } = require('../../model/schemas');
 
-const getExpenseByDate = async (req, res, next) => {
+const getLast = async (req, res, next) => {
   try {
-    const { date } = req.params;
+    const { count = 3 } = { ...req.query };
 
     const transactions = await Transaction.find({
-      date: new Date(date),
-      isIncome: false,
       owner: req.user._id,
-    }).populate('owner', '_id email name balance');
+    })
+      .populate('owner', '_id email name balance')
+      .limit(+count)
+      .sort({ date: -1 });
 
     res.status(200).json({
       transactions,
@@ -18,4 +19,4 @@ const getExpenseByDate = async (req, res, next) => {
   }
 };
 
-module.exports = getExpenseByDate;
+module.exports = getLast;

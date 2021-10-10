@@ -21,7 +21,7 @@ const getExpenseByMonth = async (req, res, next) => {
       },
     ]).limit(6);
 
-    res.status(201).json({
+    res.status(200).json({
       expenseByMonth,
     });
   } catch (error) {
