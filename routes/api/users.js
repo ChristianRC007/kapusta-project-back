@@ -23,7 +23,7 @@ router.post('/login', userValidationMiddleware, controllerWrapper(users.login));
 
 router.get('/current', authentication, controllerWrapper(users.current));
 
-router.get('/logout', authentication, controllerWrapper(users.logout));
+router.post('/logout', authentication, controllerWrapper(users.logout));
 
 // router.get('/balance', authentication, controllerWrapper(users.getBalance));
 
