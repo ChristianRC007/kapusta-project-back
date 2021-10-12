@@ -1,7 +1,9 @@
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const { User } = require('../../model/schemas');
-//const { httpCodes } = require('../../helpers/httpCodes');
 const { Conflict } = require('http-errors');
+
+require('dotenv').config();
+const { SECRET_KEY } = process.env;
 
 const signup = async (req, res, next) => {
   try {
@@ -16,10 +18,25 @@ const signup = async (req, res, next) => {
     newUser.setPassword(password);
     await newUser.save();
 
+    const { _id: id, balance } = newUser;
+    const payload = { id };
+    const token = jwt.sign(payload, SECRET_KEY);
+
+    await User.findByIdAndUpdate(
+      id,
+      { token },
+      {
+        new: true,
+        select: 'token',
+      },
+    );
+
     res.status(201).json({
+      token,
       user: {
         email,
         name,
+        balance,
       },
     });
   } catch (error) {
