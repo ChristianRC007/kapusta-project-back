@@ -39,6 +39,13 @@ const getExpenseDetail = async (req, res, next) => {
           total: { $sum: '$totalDescriptions' },
         },
       },
+      {
+        $group: {
+          _id: 'Total',
+          dataByGroup: { $push: '$$ROOT' },
+          monthTotal: { $sum: '$total' },
+        },
+      },
     ]);
 
     const maxDateEntry = await Transaction.findOne()
@@ -51,7 +58,7 @@ const getExpenseDetail = async (req, res, next) => {
 
     res.status(200).json({
       expenseDetail,
-      dates: { minDate: minDateEntry.date, maxDate: maxDateEntry.date },
+      datePoints: { minDate: minDateEntry.date, maxDate: maxDateEntry.date },
     });
   } catch (error) {
     next(error);
