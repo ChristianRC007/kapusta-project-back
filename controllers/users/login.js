@@ -1,60 +1,77 @@
 const jwt = require('jsonwebtoken');
-const { Unauthorized } = require('http-errors');
+const { OAuth2Client } = require('google-auth-library');
+
+const { Unauthorized, BadRequest } = require('http-errors');
 
 const { User } = require('../../model/schemas');
 
 require('dotenv').config();
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, CLIENT_ID } = process.env;
 
-const login = async (req, res) => {
-  const { email, password, googleId, name } = req.body;
+const login = async (req, res, next) => {
+  try {
+    const { email, password, name, tokenId } = req.body;
 
-  let user = await User.findOne({ email });
+    if (!password && !tokenId) {
+      throw new BadRequest('Password/tokenId is required');
+    }
 
-  const compareResult = user && user.comparePassword(password);
+    let user = await User.findOne({ email });
 
-  // Не найден email или неверный пароль и вход НЕ через google
-  if ((!user || !compareResult) && !googleId) {
-    throw new Unauthorized('Email or password is wrong');
-  }
+    const compareResult = user && user.comparePassword(password);
 
-  //email не найден и вход через google - создать пользователя
-  if (!user && googleId) {
-    user = await User.create({
-      email,
-      name,
-      googleId,
-      // accessToken,
-      balance: 0,
+    // Не найден email или неверный пароль и вход НЕ через google
+    if ((!user || !compareResult) && !tokenId) {
+      throw new Unauthorized('Email or password is wrong');
+    }
+
+    //Проверить пользователя google
+    if (tokenId) {
+      const client = new OAuth2Client(CLIENT_ID);
+      const ticket = await client
+        .verifyIdToken({
+          idToken: tokenId,
+          audience: CLIENT_ID,
+        })
+        .catch(() => {
+          throw new Unauthorized('Invalid token');
+        });
+
+      const { name: googleName } = ticket.getPayload();
+      //email не найден и вход через google - создать пользователя
+      if (!user && ticket) {
+        user = await User.create({
+          email,
+          name: googleName,
+          balance: 0,
+        });
+      }
+    }
+
+    const { _id: id, balance } = user;
+    const payload = { id };
+    const token = jwt.sign(payload, SECRET_KEY);
+
+    await User.findByIdAndUpdate(
+      id,
+      { token },
+      {
+        new: true,
+        select: 'token',
+      },
+    );
+
+    res.json({
+      token,
+      user: {
+        email,
+        name,
+        balance,
+      },
     });
+  } catch (error) {
+    next(error);
   }
-
-  // ??? Вход через google, но googleId не совпадает
-  if (googleId && user && user.googleId !== googleId) {
-    throw new Unauthorized('GoogleId is wrong');
-  }
-
-  const { _id: id, balance } = user;
-  const payload = { id };
-  const token = jwt.sign(payload, SECRET_KEY);
-
-  await User.findByIdAndUpdate(
-    id,
-    { token },
-    {
-      new: true,
-      select: 'token',
-    },
-  );
-
-  res.json({
-    token,
-    user: {
-      email,
-      name,
-      balance,
-    },
-  });
 };
 
 module.exports = login;

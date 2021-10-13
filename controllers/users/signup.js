@@ -1,18 +1,16 @@
-// const jwt = require('jsonwebtoken');
 const { User } = require('../../model/schemas');
-//const { httpCodes } = require('../../helpers/httpCodes');
 const { Conflict } = require('http-errors');
 
 const signup = async (req, res, next) => {
   try {
-    const { email, password, name, googleId = '' } = req.body;
+    const { email, password, name } = req.body;
 
     const findUser = await User.findOne({ email });
     if (findUser) {
       throw new Conflict('Email in use');
     }
 
-    const newUser = new User({ email, name, googleId });
+    const newUser = new User({ email, name });
     newUser.setPassword(password);
     await newUser.save();
 

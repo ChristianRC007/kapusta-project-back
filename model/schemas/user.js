@@ -25,14 +25,14 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
-    googleId: {
-      type: String,
-      default: null,
-    },
-    accessToken: {
-      type: String,
-      default: null,
-    },
+    // googleId: {
+    //   type: String,
+    //   default: null,
+    // },
+    // tokenId: {
+    //   type: String,
+    //   default: null,
+    // },
     balance: {
       type: Number,
       default: 0,
@@ -54,10 +54,10 @@ const joiUserSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6),
   name: Joi.string(),
-  googleId: Joi.string(),
-  accessToken: Joi.string(),
+  // googleId: Joi.string(),
+  tokenId: Joi.string(),
   balance: Joi.number(),
-}).or('password', 'googleId');
+}).or('password', 'tokenId');
 
 const User = model('user', userSchema);
 
