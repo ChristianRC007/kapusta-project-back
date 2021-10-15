@@ -1,0 +1,414 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.1",
+    "title": "kapusta-project-back",
+    "description": "API documentation for GoIT project 'Kapusta'. [Backend github repository](https://github.com/.../kapusta_v1-backend)",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    { "url": "http://localhost:3001" },
+    { "url": "https://kapusta-app-api.herokuapp.com/" }
+  ],
+
+  "tags": [
+    {
+      "name": "Users",
+      "description": "users endpoints"
+    },
+    {
+      "name": "Transactions",
+      "description": "transactions endpoints"
+    }
+  ],
+  "paths": {
+    "/api/v1/users/signup": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Email in use",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/v1/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User authentication",
+        "parameters": [],
+        "requestBody": {
+          "description": "authentication's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "403": {
+            "description": "Email or password is wrong",
+            "content": {}
+          },
+          "401": {
+            "description": "Invalid token",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/v1/users/logout": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user / Invalid session",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/v1/users/balance": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Updating user balance",
+        "parameters": [],
+        "security": [{ "Bearer": [] }]
+      }
+    },
+
+    "/api/v1/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Current user",
+        "parameters": [],
+        "security": [{ "Bearer": [] }]
+      }
+    },
+
+    "/api/v1/transactions/addIncome": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Adding a revenue transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Transactions object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionAddIncomeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionAddIncomeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/v1/transactions/addExpense": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Adding an expense transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Transactions object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionAddExpenseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionAddExpenseResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/v1/transactions/:transactionId": {
+      "delete": {
+        "tags": ["Transactions"],
+        "summary": "Delete transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }]
+      }
+    },
+
+    "/api/v1/transactions/getExpenseByDate/:date": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }]
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Session's access token (needed for all requests)",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmMyMDg1YmQwOTM2NTI4MTA3Y2UyNzQiLCJzaWQiOiI1ZmMyZDJmY2UxZDIwNTA2NzAyYmRkMjIiLCJpYXQiOjE2MDY2MDM1MTYsImV4cCI6MTYwNjYwNzExNn0.rJ_QjU4KvA76H96RHsvOBChK0Vjbd0NmqjMxdQVJIXA"
+          },
+
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "balance": {
+                "type": "integer",
+                "description": "User's balance",
+                "example": 10000,
+                "minimum": 0
+              }
+            }
+          }
+        },
+
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNjliOTk5OWFhMWI1OGMxMzE3OGU3NSIsImlhdCI6MTYzNDMxODc0NX0.nKbAAM399iINJFivkFb8Ne2Z7a9rMXrdr3L21remrPs",
+          "user": {
+            "name": "User's name",
+            "email": "user@example.com",
+            "balance": 0
+          }
+        }
+      },
+
+      "TransactionAddIncomeRequest": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "Date" },
+          "category": { "type": "string" },
+          "description": { "type": "string" },
+          "amount": { "type": "Number" },
+          "isIncome": { "type": "Boolean" }
+        },
+        "example": {
+          "date": "2021-09-26",
+          "category": "Доход",
+          "description": "лотарея",
+          "amount": 110000,
+          "isIncome": true
+        }
+      },
+      "TransactionAddIncomeResponse": {
+        "type": "object",
+        "properties": {
+          "transactionData": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "Date" },
+              "category": { "type": "string" },
+              "description": { "type": "string" },
+              "amount": { "type": "Number" },
+              "isIncome": { "type": "Boolean" },
+              "owner": { "type": "ObjectId" },
+              "_id": { "type": "string" }
+            }
+          }
+        },
+        "example": {
+          "transactionData": {
+            "date": "2021-09-26T00:00:00.000Z",
+            "category": "Доход",
+            "description": "лотарея",
+            "amount": 110000,
+            "isIncome": true,
+            "owner": "616579bfc5c00253cf2ca068",
+            "_id": "61657a4cfa20452eabaa44f8",
+            "createdAt": "2021-10-12T12:06:36.588Z",
+            "updatedAt": "2021-10-12T12:06:36.588Z"
+          }
+        }
+      },
+      "TransactionAddExpenseRequest": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "Date" },
+          "category": { "type": "string" },
+          "description": { "type": "string" },
+          "amount": { "type": "Number" },
+          "isIncome": { "type": "Boolean" }
+        },
+        "example": {
+          "date": "2021-10-26",
+          "category": "Образование",
+          "description": "Курсы GoIt",
+          "amount": 3000,
+          "isIncome": false
+        }
+      },
+      "TransactionAddExpenseResponse": {
+        "type": "object",
+        "properties": {
+          "transactionData": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "Date" },
+              "category": { "type": "string" },
+              "description": { "type": "string" },
+              "amount": { "type": "Number" },
+              "isIncome": { "type": "Boolean" },
+              "owner": { "type": "ObjectId" },
+              "_id": { "type": "string" }
+            }
+          }
+        },
+        "example": {
+          "transactionData": {
+            "date": "2021-10-26T00:00:00.000Z",
+            "category": "Образование",
+            "description": "Курсы GoIt",
+            "amount": 3000,
+            "isIncome": false,
+            "owner": "6160726197186cf3ccc540b1",
+            "_id": "616365fa9d89d85b6e6a669c",
+            "createdAt": "2021-10-10T22:15:22.713Z",
+            "updatedAt": "2021-10-10T22:15:22.713Z"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

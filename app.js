@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const { httpCodes } = require('./helpers/httpCodes');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
 const usersRouter = require('./routes/api/users');
 const transactionsRouter = require('./routes/api/transactions');
 
@@ -14,6 +17,7 @@ app.use(express.json());
 
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/transactions', transactionsRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {
   res.status(httpCodes.NOT_FOUND).json({
