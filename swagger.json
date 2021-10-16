@@ -83,7 +83,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -129,7 +129,7 @@
             "content": {}
           },
           "404": {
-            "description": "Invalid user / Invalid session",
+            "description": "Invalid user",
             "content": {}
           }
         }
@@ -141,7 +141,38 @@
         "tags": ["Users"],
         "summary": "Updating user balance",
         "parameters": [],
-        "security": [{ "Bearer": [] }]
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "balance object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
       }
     },
 
@@ -150,7 +181,31 @@
         "tags": ["Users"],
         "summary": "Current user",
         "parameters": [],
-        "security": [{ "Bearer": [] }]
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid user",
+            "content": {}
+          }
+        }
       }
     },
 
@@ -226,12 +281,38 @@
       }
     },
 
-    "/api/v1/transactions/:transactionId": {
+    "/api/v1/transactions/{transactionId}": {
       "delete": {
         "tags": ["Transactions"],
         "summary": "Delete transaction",
-        "parameters": [],
-        "security": [{ "Bearer": [] }]
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "description": "Transaction's id (_id field in transaction object)",
+            "type": "string"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          },
+          "404": {
+            "description": "Transactions not found",
+            "content": {}
+          }
+        }
       }
     },
 
@@ -304,6 +385,82 @@
             "name": "User's name",
             "email": "user@example.com",
             "balance": 0
+          }
+        }
+      },
+
+      "CurrentResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "balance": {
+                "type": "integer",
+                "description": "User's balance",
+                "example": 10000,
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "example": {
+          "user": {
+            "name": "User's name",
+            "email": "user@example.com",
+            "balance": 10000
+          }
+        }
+      },
+
+      "BalanceRequest": {
+        "type": "object",
+        "required": ["balance"],
+        "properties": {
+          "balance": {
+            "type": "string",
+            "description": "User's balance"
+          }
+        },
+        "example": {
+          "balance": 10000
+        }
+      },
+
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "balance": {
+                "type": "integer",
+                "description": "User's balance",
+                "example": 10000,
+                "minimum": 0
+              }
+            }
+          }
+        },
+
+        "example": {
+          "user": {
+            "email": "user@example.com",
+            "balance": 10000
           }
         }
       },
