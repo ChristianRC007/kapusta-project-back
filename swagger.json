@@ -72,12 +72,12 @@
         "summary": "User authentication",
         "parameters": [],
         "requestBody": {
-          "description": "authentication's object",
+          "description": "Authentication's object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/LoginRequestGoogle"
               }
             }
           }
@@ -348,6 +348,41 @@
           }
         }
       },
+
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+
+      "LoginRequestGoogle": {
+        "type": "object",
+        "required": ["email", "tokenId"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "tokenId": {
+            "type": "string",
+            "description": "User's tokenId",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNjQ5MGZiMzc5NzV"
+          }
+        }
+      },
+
       "LoginResponse": {
         "type": "object",
         "properties": {
