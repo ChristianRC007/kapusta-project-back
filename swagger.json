@@ -383,6 +383,56 @@
           }
         }
       }
+    },
+
+    "/api/v1/transactions/getExpenseByMonth": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get expense transactions by month",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsByMonth"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/v1/transactions/getIncomeByMonth": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get income transactions by month",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsByMonth"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
+      }
     }
   },
 
@@ -714,6 +764,38 @@
               "_id": "616365fa9d89d85b6e6a667c",
               "createdAt": "2021-10-10T22:15:22.713Z",
               "updatedAt": "2021-10-10T22:15:22.713Z"
+            }
+          ]
+        }
+      },
+      "TransactionsByMonth": {
+        "type": "object",
+        "properties": {
+          "transactions": {
+            "type": "array",
+            "properties": {
+              "_id": { "type": "string" },
+              "month": { "type": "number" },
+              "year": { "type": "number" },
+              "total": { "type": "number" }
+            }
+          }
+        },
+        "example": {
+          "expenseByMonth": [
+            {
+              "_id": {
+                "month": 10,
+                "year": 2021
+              },
+              "total": 4400
+            },
+            {
+              "_id": {
+                "month": 9,
+                "year": 2021
+              },
+              "total": 12800
             }
           ]
         }
