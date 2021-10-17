@@ -9,8 +9,6 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
   "servers": [
     { "url": "http://localhost:3001" },
     { "url": "https://kapusta-app-api.herokuapp.com/" }
@@ -77,7 +75,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginRequestGoogle"
+                "oneOf": [
+                  { "$ref": "#/components/schemas/LoginRequest" },
+                  { "$ref": "#/components/schemas/LoginRequestGoogle" }
+                ]
               }
             }
           }
@@ -291,7 +292,7 @@
             "name": "transactionId",
             "required": true,
             "description": "Transaction's id (_id field in transaction object)",
-            "type": "string"
+            "schema": { "type": "string" }
           }
         ],
         "security": [{ "Bearer": [] }],
@@ -316,12 +317,31 @@
       }
     },
 
-    "/api/v1/transactions/getExpenseByDate/:date": {
+    "/api/v1/transactions/getExpenseByDate/{date}": {
       "get": {
         "tags": ["Transactions"],
         "summary": "Get transaction",
-        "parameters": [],
-        "security": [{ "Bearer": [] }]
+        "parameters": [
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "description": "Date of transactions ",
+            "schema": { "type": "string", "format": "yyyy-mm-dd" },
+            "example": "2021-10-06"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
       }
     }
   },
@@ -503,11 +523,11 @@
       "TransactionAddIncomeRequest": {
         "type": "object",
         "properties": {
-          "date": { "type": "Date" },
+          "date": { "type": "string" },
           "category": { "type": "string" },
           "description": { "type": "string" },
-          "amount": { "type": "Number" },
-          "isIncome": { "type": "Boolean" }
+          "amount": { "type": "number" },
+          "isIncome": { "type": "boolean" }
         },
         "example": {
           "date": "2021-09-26",
@@ -523,12 +543,12 @@
           "transactionData": {
             "type": "object",
             "properties": {
-              "date": { "type": "Date" },
+              "date": { "type": "string" },
               "category": { "type": "string" },
               "description": { "type": "string" },
-              "amount": { "type": "Number" },
-              "isIncome": { "type": "Boolean" },
-              "owner": { "type": "ObjectId" },
+              "amount": { "type": "number" },
+              "isIncome": { "type": "boolean" },
+              "owner": { "type": "string" },
               "_id": { "type": "string" }
             }
           }
@@ -550,11 +570,11 @@
       "TransactionAddExpenseRequest": {
         "type": "object",
         "properties": {
-          "date": { "type": "Date" },
+          "date": { "type": "string" },
           "category": { "type": "string" },
           "description": { "type": "string" },
-          "amount": { "type": "Number" },
-          "isIncome": { "type": "Boolean" }
+          "amount": { "type": "number" },
+          "isIncome": { "type": "boolean" }
         },
         "example": {
           "date": "2021-10-26",
@@ -570,12 +590,12 @@
           "transactionData": {
             "type": "object",
             "properties": {
-              "date": { "type": "Date" },
+              "date": { "type": "string" },
               "category": { "type": "string" },
               "description": { "type": "string" },
-              "amount": { "type": "Number" },
-              "isIncome": { "type": "Boolean" },
-              "owner": { "type": "ObjectId" },
+              "amount": { "type": "number" },
+              "isIncome": { "type": "boolean" },
+              "owner": { "type": "string" },
               "_id": { "type": "string" }
             }
           }
