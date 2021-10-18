@@ -501,6 +501,40 @@
           }
         }
       }
+    },
+
+    "/api/v1/transactions/getLast": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get last transactions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "count",
+            "required": false,
+            "description": "The numbers of last transactions to return",
+            "schema": { "type": "number" },
+            "example": "3"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsExpenseByDate"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
+      }
     }
   },
 
@@ -690,7 +724,7 @@
         "example": {
           "date": "2021-09-26",
           "category": "Доход",
-          "description": "лотарея",
+          "description": "лотерея",
           "amount": 110000,
           "isIncome": true
         }
@@ -716,7 +750,7 @@
           "transactionData": {
             "date": "2021-09-26T00:00:00.000Z",
             "category": "Доход",
-            "description": "лотарея",
+            "description": "лотерея",
             "amount": 110000,
             "isIncome": true,
             "owner": "616579bfc5c00253cf2ca068",
