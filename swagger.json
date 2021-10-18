@@ -433,6 +433,74 @@
           }
         }
       }
+    },
+
+    "/api/v1/transactions/getExpenseDetail/{date}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "description": "Month of transactions ",
+            "schema": { "type": "string", "format": "yyyy-mm" },
+            "example": "2021-10"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsExpenseDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/v1/transactions/getIncomeDetail/{date}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "description": "Month of transactions ",
+            "schema": { "type": "string", "format": "yyyy-mm" },
+            "example": "2021-10"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsIncomeDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
+      }
     }
   },
 
@@ -627,6 +695,7 @@
           "isIncome": true
         }
       },
+
       "TransactionAddIncomeResponse": {
         "type": "object",
         "properties": {
@@ -657,6 +726,7 @@
           }
         }
       },
+
       "TransactionAddExpenseRequest": {
         "type": "object",
         "properties": {
@@ -674,6 +744,7 @@
           "isIncome": false
         }
       },
+
       "TransactionAddExpenseResponse": {
         "type": "object",
         "properties": {
@@ -704,6 +775,7 @@
           }
         }
       },
+
       "TransactionsExpenseByDate": {
         "type": "object",
         "properties": {
@@ -736,6 +808,7 @@
           ]
         }
       },
+
       "TransactionsIncomeByDate": {
         "type": "object",
         "properties": {
@@ -768,6 +841,7 @@
           ]
         }
       },
+
       "TransactionsByMonth": {
         "type": "object",
         "properties": {
@@ -799,8 +873,119 @@
             }
           ]
         }
+      },
+
+      "TransactionsExpenseDetail": {
+        "type": "object",
+        "properties": {
+          "expenseDetail": {
+            "type": "array",
+            "properties": {
+              "_id": { "type": "string" },
+              "descriptions": {
+                "type": "array",
+                "properties": {
+                  "description": { "type": "string" },
+                  "total": { "type": "number" }
+                }
+              },
+              "total": { "type": "number" }
+            }
+          },
+          "dates": {
+            "type": "object",
+            "properties": {
+              "minDate": { "type": "string", "format": "date" },
+              "maxDate": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "example": {
+          "expenseDetail": [
+            {
+              "_id": "Развлечения",
+              "descriptions": [
+                {
+                  "description": "Салют",
+                  "total": 1000
+                },
+                {
+                  "description": "Яхта",
+                  "total": 3600
+                }
+              ],
+              "total": 4600
+            },
+            {
+              "_id": "Алкоголь",
+              "descriptions": [
+                {
+                  "description": "Мартини",
+                  "total": 160
+                }
+              ],
+              "total": 160
+            },
+            {
+              "_id": "Продукты",
+              "descriptions": [
+                {
+                  "description": "Фрукты",
+                  "total": 400
+                }
+              ],
+              "total": 400
+            }
+          ]
+        }
+      },
+
+      "TransactionsIncomeDetail": {
+        "type": "object",
+        "properties": {
+          "expenseDetail": {
+            "type": "array",
+            "properties": {
+              "_id": { "type": "string" },
+              "descriptions": {
+                "type": "array",
+                "properties": {
+                  "description": { "type": "string" },
+                  "total": { "type": "number" }
+                }
+              },
+              "total": { "type": "number" }
+            }
+          },
+          "dates": {
+            "type": "object",
+            "properties": {
+              "minDate": { "type": "string", "format": "date" },
+              "maxDate": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "example": {
+          "expenseDetail": [
+            {
+              "_id": "ЗП",
+              "descriptions": [
+                {
+                  "description": "Основная",
+                  "total": 16000
+                },
+                {
+                  "description": "Доп.",
+                  "total": 5000
+                }
+              ],
+              "total": 21000
+            }
+          ]
+        }
       }
     },
+
     "securitySchemes": {
       "Bearer": {
         "type": "http",
