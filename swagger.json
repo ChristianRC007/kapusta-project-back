@@ -385,6 +385,56 @@
       }
     },
 
+    "/api/v1/transactions/getExpenseByMonth": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get expense transactions by month",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsByMonth"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/v1/transactions/getIncomeByMonth": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get income transactions by month",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsByMonth"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {}
+          }
+        }
+      }
+    },
+
     "/api/v1/transactions/getExpenseDetail/{date}": {
       "get": {
         "tags": ["Transactions"],
@@ -645,6 +695,7 @@
           "isIncome": true
         }
       },
+
       "TransactionAddIncomeResponse": {
         "type": "object",
         "properties": {
@@ -675,6 +726,7 @@
           }
         }
       },
+
       "TransactionAddExpenseRequest": {
         "type": "object",
         "properties": {
@@ -692,6 +744,7 @@
           "isIncome": false
         }
       },
+
       "TransactionAddExpenseResponse": {
         "type": "object",
         "properties": {
@@ -722,6 +775,7 @@
           }
         }
       },
+
       "TransactionsExpenseByDate": {
         "type": "object",
         "properties": {
@@ -754,6 +808,7 @@
           ]
         }
       },
+
       "TransactionsIncomeByDate": {
         "type": "object",
         "properties": {
@@ -786,6 +841,40 @@
           ]
         }
       },
+
+      "TransactionsByMonth": {
+        "type": "object",
+        "properties": {
+          "transactions": {
+            "type": "array",
+            "properties": {
+              "_id": { "type": "string" },
+              "month": { "type": "number" },
+              "year": { "type": "number" },
+              "total": { "type": "number" }
+            }
+          }
+        },
+        "example": {
+          "expenseByMonth": [
+            {
+              "_id": {
+                "month": 10,
+                "year": 2021
+              },
+              "total": 4400
+            },
+            {
+              "_id": {
+                "month": 9,
+                "year": 2021
+              },
+              "total": 12800
+            }
+          ]
+        }
+      },
+
       "TransactionsExpenseDetail": {
         "type": "object",
         "properties": {
@@ -850,6 +939,7 @@
           ]
         }
       },
+
       "TransactionsIncomeDetail": {
         "type": "object",
         "properties": {
@@ -895,6 +985,7 @@
         }
       }
     },
+
     "securitySchemes": {
       "Bearer": {
         "type": "http",
