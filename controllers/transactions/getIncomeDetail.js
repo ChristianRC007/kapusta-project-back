@@ -4,11 +4,12 @@ const getIncomeDetail = async (req, res, next) => {
   try {
     const { date } = req.params;
     const curDate = new Date(date);
-    const firstDay = new Date(curDate.getFullYear(), curDate.getMonth(), 0);
-    const lastDay = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 1);
-
-    // console.log(firstDay);
-    // console.log(lastDay);
+    const firstDay = new Date(
+      Date.UTC(curDate.getFullYear(), curDate.getMonth(), 1),
+    );
+    const lastDay = new Date(
+      Date.UTC(curDate.getFullYear(), curDate.getMonth() + 1, 0),
+    );
 
     const incomeDetail = await Transaction.aggregate([
       {

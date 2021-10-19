@@ -16,12 +16,11 @@ const authentication = async (req, res, next) => {
     if (bearer !== 'Bearer') {
       throw new Unauthorized('Not authorized');
     }
-    // const { id } = jwt.verify(token, SECRET_KEY);
-    // const userId = await User.findById(id);
+
     jwt.verify(token, SECRET_KEY);
 
     const user = await User.findOne({ token });
-    // if (!user || !userId) {
+
     if (!user) {
       throw new Unauthorized('Not authorized');
     }
@@ -29,7 +28,6 @@ const authentication = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    // next(new Unauthorized('Not authorized'));
     next(new Unauthorized(error.message));
   }
 };

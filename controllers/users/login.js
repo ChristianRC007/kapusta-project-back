@@ -20,12 +20,10 @@ const login = async (req, res, next) => {
 
     const compareResult = user && user.comparePassword(password);
 
-    // Не найден email или неверный пароль и вход НЕ через google
     if ((!user || !compareResult) && !tokenId) {
       throw new Unauthorized('Email or password is wrong');
     }
 
-    //Проверить пользователя google
     if (tokenId) {
       const client = new OAuth2Client(CLIENT_ID);
       const ticket = await client
@@ -38,7 +36,7 @@ const login = async (req, res, next) => {
         });
 
       const { name: googleName } = ticket.getPayload();
-      //email не найден и вход через google - создать пользователя
+
       if (!user && ticket) {
         user = await User.create({
           email,
