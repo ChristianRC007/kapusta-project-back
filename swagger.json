@@ -10,8 +10,8 @@
     }
   },
   "servers": [
-    { "url": "http://localhost:3001" },
-    { "url": "https://kapusta-app-api.herokuapp.com/" }
+    { "url": "https://kapusta-app-api.herokuapp.com/" },
+    { "url": "http://localhost:3001" }
   ],
 
   "tags": [
